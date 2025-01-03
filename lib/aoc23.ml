@@ -10,15 +10,18 @@ let file_lines filename: string list =
         close_in_noerr ic;
         List.rev !lines ;;
 
-module Day1 = struct
-    let parse_int_of_char c = 
-        let i = int_of_char c - int_of_char '0' in
-        if i < 10 then Some i else None;;
+let parse_int_of_char c = 
+    let i = int_of_char c - int_of_char '0' in
+    if i < 10 then Some i else None;;
 
-    let is_digit (d: string): bool = 
-        match int_of_string_opt d with
-        | Some _ -> true
-        | None -> false
+let is_numeric (d: string): bool = 
+    match int_of_string_opt d with
+    | Some _ -> true
+    | None -> false
+
+let explode s = List.init (String.length s) (String.get s)
+
+module Day1 = struct
 
     let rec tokenize line: int list =
         match line with
@@ -32,7 +35,7 @@ module Day1 = struct
 
     let digit_prefix (line: string): int option =
         match line with
-        | line when ((String.length line) > 0) && (is_digit (String.sub line 0 1)) -> (int_of_string_opt (String.sub line 0 1))
+        | line when ((String.length line) > 0) && (is_numeric (String.sub line 0 1)) -> (int_of_string_opt (String.sub line 0 1))
         | line when ((String.length line) > 2) && (String.sub line 0 3) = "one" -> Some 1
         | line when ((String.length line) > 2) && (String.sub line 0 3) = "two" -> Some 2
         | line when ((String.length line) > 4) && (String.sub line 0 5) = "three" -> Some 3
@@ -68,7 +71,6 @@ module Day1 = struct
             print_endline (Int.to_string (List.hd (List.rev(toks))));*)
             int_of_string ((Int.to_string (List.hd toks)) ^ (Int.to_string (List.hd (List.rev toks))))
 
-    let explode s = List.init (String.length s) (String.get s)
 
     let solve_p1 (lines: string list): int = 
         lines
